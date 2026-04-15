@@ -80,10 +80,10 @@ public class TaskGraphQLController {
 
     @QueryMapping
     public Window<TaskResponse> getAllTasks(
-            @Argument Long userId,
+            @Argument Long reporterId,
             ScrollSubrange subrange){
         ScrollPosition position = subrange.position().orElse(ScrollPosition.keyset());
         int limit = subrange.count().orElse(10);
-        return service.getAllTasks(userId, position, limit);
+        return service.getAllTasks(reporterId, position, limit);
     }
 }

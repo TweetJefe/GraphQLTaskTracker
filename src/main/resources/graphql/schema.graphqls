@@ -1,0 +1,132 @@
+scalar DateTime
+type Query {
+    getProjectById(id: ID!): ProjectResponse
+    getAllProjects(first: Int, after: String): ProjectConnection
+
+    getTasksByProjectId(projectId: ID!, first: Int, after: String): TaskConnection
+    getTasksByAssigneeId(assigneeId: ID!, first: Int, after: String): TaskConnection
+}
+
+type Mutation {
+    authViaTelegram(initData: String!, telegramId: ID!, username: String): AuthResponse!
+    deleteUser(userId: ID!): ID!
+
+    createProject(input: CreateProjectInput!): ProjectResponse!
+    updateProject(id: ID!, input: UpdateProjectInput!): ProjectResponse!
+    deleteProject(id: ID!): ID!
+    addAssignee(projectId: ID!, assigneeId: ID!): ProjectResponse!
+    removeAssignee(projectId: ID!, assigneeId: ID!): ProjectResponse!
+
+    createTask(input: CreateTaskInput!): TaskResponse!
+    updateTask(id: ID!, input: UpdateTaskInput!): TaskResponse!
+    deleteTask(id: ID!): ID!
+    assignUser(taskId: ID!, assigneeId: ID!): TaskResponse!
+    changeStatus(taskId: ID!, status: TaskStatus!): TaskResponse!
+}
+
+
+type AuthResponse {
+    token: String!
+    userId: ID!
+}
+
+type ProjectResponse {
+    id: ID!
+    name: String!
+    description: String
+    assignees: [ID!]
+    reporterId: ID!
+    status: ProjectStatus
+    startedAt: DateTime
+    updatedAt: DateTime
+
+    tasks: [TaskResponse]
+}
+
+type TaskResponse {
+    id: ID!
+    name: String!
+    description: String
+    status: TaskStatus!
+    priority: TaskPriority!
+    projectId: ID!
+    assigneeId: ID!
+    reporterId: ID!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+    deadLine: DateTime!
+
+}
+
+enum TaskStatus {
+    TODO
+    IN_PROGRESS
+    IN_REVIEW
+    DONE
+}
+
+enum TaskPriority {
+    LOW
+    MIDDLE
+    HIGH
+}
+
+enum ProjectStatus {
+    ACTIVE
+    FINISHED
+}
+
+type ProjectConnection {
+    edges: [ProjectEdge!]!
+    pageInfo: PageInfo!
+}
+
+type ProjectEdge {
+    cursor: String!
+    node: ProjectResponse!
+}
+
+type TaskConnection {
+    edges: [TaskEdge!]!
+    pageInfo: PageInfo!
+}
+
+type TaskEdge {
+    cursor: String!
+    node: TaskResponse!
+}
+
+type PageInfo {
+    hasPreviousPage: Boolean!
+    hasNextPage: Boolean!
+    startCursor: String
+    endCursor: String
+}
+
+input CreateProjectInput {
+    name: String!
+    description: String
+    reporterId: ID!
+    assignees: [ID!]
+}
+
+input UpdateProjectInput {
+    name: String!
+    description: String
+}
+
+input CreateTaskInput {
+    projectId: ID!
+    name: String!
+    description: String
+    priority: TaskPriority
+}
+
+input UpdateTaskInput {
+    name: String!
+    description: String
+    projectId: ID!
+    priority: TaskPriority
+    status: TaskStatus
+    deadLine: DateTime
+}

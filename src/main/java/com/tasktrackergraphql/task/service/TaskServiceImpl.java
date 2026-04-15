@@ -152,9 +152,9 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Window<TaskResponse> getAllTasks(Long userId, ScrollPosition pos, int limit) {
-        Window<TaskEntity> taskWin = repository.findByUserId(
-                userId,
+    public Window<TaskResponse> getAllTasks(Long reporterId, ScrollPosition pos, int limit) {
+        Window<TaskEntity> taskWin = repository.findByReporterId(
+                reporterId,
                 pos,
                 Limit.of(limit));
         return taskWin.map(mapper::taskToResponse);

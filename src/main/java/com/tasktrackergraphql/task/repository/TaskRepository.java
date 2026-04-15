@@ -15,7 +15,7 @@ public interface TaskRepository extends JpaRepository<TaskEntity, Long> {
 
     Window<TaskEntity> findByAssigneeId(Long assigneeId, ScrollPosition pos, Limit limit);
 
-    Window<TaskEntity> findByUserId(Long userId, ScrollPosition pos, Limit limit);
+    Window<TaskEntity> findByReporterId(Long reporterId, ScrollPosition pos, Limit limit);
 
     @Modifying
     @Query("DELETE FROM TaskEntity t WHERE t.projectId = :projectId")

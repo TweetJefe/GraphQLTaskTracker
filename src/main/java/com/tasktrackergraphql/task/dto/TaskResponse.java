@@ -2,7 +2,7 @@ package com.tasktrackergraphql.task.dto;
 
 import com.tasktrackergraphql.task.enums.TaskPriority;
 import com.tasktrackergraphql.task.enums.TaskStatus;
-import com.tasktrackergraphql.task.enums.TaskType;
+
 import java.time.Instant;
 
 public record TaskResponse(
@@ -11,11 +11,10 @@ public record TaskResponse(
         String description,
         TaskStatus status,
         TaskPriority priority,
-        TaskType type,
         Long projectId,
         Long assigneeId,
         Long reporterId,
         Instant createdAt,
         Instant updatedAt,
-        Instant deadline)
+        Instant deadLine)
 {}
