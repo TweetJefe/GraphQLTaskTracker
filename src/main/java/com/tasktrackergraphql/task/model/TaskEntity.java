@@ -1,8 +1,8 @@
 package com.tasktrackergraphql.task.model;
 
+import com.tasktrackergraphql.project.model.ProjectEntity;
 import com.tasktrackergraphql.task.enums.TaskPriority;
 import com.tasktrackergraphql.task.enums.TaskStatus;
-import com.tasktrackergraphql.task.enums.TaskType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -35,9 +35,11 @@ public class TaskEntity {
     @Enumerated(EnumType.STRING)
     private TaskPriority priority;
 
-    @Enumerated(EnumType.ORDINAL)
-    private TaskType type;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "project_id", insertable = false, updatable = false)
+    private ProjectEntity project;
 
+    @Column(name = "project_id")
     private Long projectId;
     private Long assigneeId;
     private Long reporterId;

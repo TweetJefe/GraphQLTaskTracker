@@ -18,6 +18,8 @@ import org.springframework.data.domain.ScrollPosition;
 import org.springframework.data.domain.Window;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ProjectServiсeImpl implements ProjectService{
@@ -111,6 +113,11 @@ public class ProjectServiсeImpl implements ProjectService{
                 pos,
                 Limit.of(limit));
         return winProj.map(mapper::toResponse);
+    }
+
+    @Override
+    public List<ProjectEntity> getAllProjectByReporterId(Long reporterId) {
+        return List.of();
     }
 
 }

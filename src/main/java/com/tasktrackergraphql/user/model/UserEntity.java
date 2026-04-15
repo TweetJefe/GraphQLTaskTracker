@@ -17,6 +17,7 @@ import java.time.Instant;
 @EntityListeners(AuditingEntityListener.class)
 public class UserEntity {
     @Id
+    @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -26,9 +27,11 @@ public class UserEntity {
     @Column(name = "username")
     private String username;
 
+    @Column(name = "name")
+    private String name;
+
     @Column(name = "language_code")
     private String languageCode;
-
 
     @CreatedDate
     @Column(updatable = false)

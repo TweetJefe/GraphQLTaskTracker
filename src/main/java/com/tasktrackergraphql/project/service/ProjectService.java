@@ -7,6 +7,8 @@ import com.tasktrackergraphql.project.model.ProjectEntity;
 import org.springframework.data.domain.ScrollPosition;
 import org.springframework.data.domain.Window;
 
+import java.util.List;
+
 public interface ProjectService{
     ProjectResponse createProject (CreateProjectInput input);
 
@@ -23,4 +25,6 @@ public interface ProjectService{
     ProjectResponse getProjectById (Long projectId);
 
     Window<ProjectResponse> getAllProjects (ScrollPosition pos, int limit);
+
+    List<ProjectEntity> getAllProjectByReporterId(Long reporterId);
 }

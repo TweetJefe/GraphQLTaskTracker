@@ -1,9 +1,41 @@
 services:
-  postgres:
-    image: 'postgres:latest'
+  db:
+    image: postgres:16-alpine
+    container_name: tasktracker-db
     environment:
-      - 'POSTGRES_DB=mydatabase'
-      - 'POSTGRES_PASSWORD=secret'
-      - 'POSTGRES_USER=myuser'
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: tasktracker
     ports:
-      - '5432'
+      - "5434:5432"
+    volumes:
+      - tasktracker-db-data:/var/lib/postgresql/data
+    networks:
+      - tasktracker-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d tasktracker"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: .
+    container_name: tasktracker-api
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/tasktracker
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: root
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - tasktracker-network
+
+networks:
+  tasktracker-network:
+    driver: bridge
+
+volumes:
+  tasktracker-db-data:

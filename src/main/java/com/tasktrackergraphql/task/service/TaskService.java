@@ -34,7 +34,7 @@ public interface TaskService {
 
     void removeFromProject(Long taskId, Long projectId);
 
-    Window<TaskResponse> getAllTasks (Long userId, ScrollPosition pos, int limit);
+    Window<TaskResponse> getAllTasks (Long reporterId, ScrollPosition pos, int limit);
 
     void deleteAllByProjectId(Long projectId);
 }
