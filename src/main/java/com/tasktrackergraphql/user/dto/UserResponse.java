@@ -1,6 +1,6 @@
 package com.tasktrackergraphql.user.dto;
 
-import java.time.Instant;
+import java.time.OffsetDateTime;
 
 public record UserResponse(
         Long id,
@@ -8,7 +8,7 @@ public record UserResponse(
         String username,
         String name,
         String languageCode,
-        Instant createdAt,
-        Instant updatedAt
+        OffsetDateTime createdAt,
+        OffsetDateTime updatedAt
 ) {
 }

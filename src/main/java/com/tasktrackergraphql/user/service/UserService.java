@@ -8,11 +8,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 public interface UserService {
-    UserEntity loginOrRegister (Long telegramId, String username);
+    UserEntity loginOrRegister (Long telegramId, String username, String languageCode);
 
     UserEntity saveUser(UserEntity task);
 
     Long deleteUser(Long userId);
 
     UserResponse getUserById(Long id);
+
+    UserResponse getUserByUsername(String username);
 }

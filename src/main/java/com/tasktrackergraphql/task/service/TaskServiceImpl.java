@@ -86,6 +86,7 @@ public class TaskServiceImpl implements TaskService {
 
         task.setAssigneeId(assigneeId);
         TaskEntity savedTask = saveTask(task);
+
         return mapper.taskToResponse(savedTask);
     }
 
@@ -130,25 +131,6 @@ public class TaskServiceImpl implements TaskService {
                 Limit.of(limit)
         );
         return taskWin.map(mapper::taskToResponse);
-    }
-
-    @Override
-    public void assignToProject(Long taskId, Long projectId) {
-        TaskEntity task = repository.findById(taskId)
-                .orElseThrow(() -> new EntityNotFoundException("Задача не найдена"));
-
-        task.setProjectId(projectId);
-        saveTask(task);
-    }
-
-    @Override
-    public void removeFromProject(Long taskId, Long projectId) {
-        TaskEntity task = repository.findById(taskId)
-                .orElseThrow(() -> new EntityNotFoundException("Задача не найдена"));
-        if (projectId.equals(task.getProjectId())) {
-            task.setProjectId(null);
-            saveTask(task);
-        }
     }
 
     @Override

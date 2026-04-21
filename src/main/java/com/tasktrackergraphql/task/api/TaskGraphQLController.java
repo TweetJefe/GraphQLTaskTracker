@@ -5,6 +5,7 @@ import com.tasktrackergraphql.task.dto.TaskResponse;
 import com.tasktrackergraphql.task.dto.UpdateTaskInput;
 import com.tasktrackergraphql.task.enums.TaskStatus;
 import com.tasktrackergraphql.task.service.TaskService;
+import com.tasktrackergraphql.TaskTrackerFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.ScrollPosition;
 import org.springframework.data.domain.Window;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Controller;
 @RequiredArgsConstructor
 public class TaskGraphQLController {
     private final TaskService service;
+    private final TaskTrackerFacade facade;
 
     @MutationMapping
     public TaskResponse createTask(
@@ -43,7 +45,14 @@ public class TaskGraphQLController {
     public TaskResponse assignUser(
             @Argument Long taskId,
             @Argument Long assigneeId){
-        return service.assignUser(taskId, assigneeId);
+        return facade.assignUser(taskId, assigneeId);
+    }
+
+    @MutationMapping
+    public TaskResponse assignUserByUsername(
+            @Argument Long taskId,
+            @Argument String username){
+        return facade.assignUserByUsername(taskId, username);
     }
 
     @MutationMapping

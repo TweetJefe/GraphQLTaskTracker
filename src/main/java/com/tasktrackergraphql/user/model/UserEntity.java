@@ -6,7 +6,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.Instant;
+import java.time.OffsetDateTime;
 
 @Entity
 @Table(name = "users")
@@ -24,7 +24,7 @@ public class UserEntity {
     @Column(unique = true, nullable = false)
     private Long telegramId;
 
-    @Column(name = "username")
+    @Column(name = "username", unique = true)
     private String username;
 
     @Column(name = "name")
@@ -35,8 +35,8 @@ public class UserEntity {
 
     @CreatedDate
     @Column(updatable = false)
-    private Instant createdAt;
+    private OffsetDateTime createdAt;
 
     @LastModifiedDate
-    private Instant updatedAt;
+    private OffsetDateTime updatedAt;
 }

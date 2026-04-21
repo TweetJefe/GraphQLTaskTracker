@@ -18,6 +18,7 @@ import org.springframework.data.domain.ScrollPosition;
 import org.springframework.data.domain.Window;
 import org.springframework.stereotype.Service;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Service
@@ -62,6 +63,8 @@ public class ProjectServiсeImpl implements ProjectService{
                 .orElseThrow(() -> new EntityNotFoundException(""));
         project.setName(input.name());
         project.setDescription(input.description());
+        project.setStatus(input.status());
+        project.setUpdatedAt(OffsetDateTime.now());
 
         ProjectEntity savedProject = saveProject(project);
         return mapper.toResponse(savedProject);
@@ -109,7 +112,7 @@ public class ProjectServiсeImpl implements ProjectService{
 
     @Override
     public Window<ProjectResponse> getAllProjects(ScrollPosition pos, int limit) {
-        Window<ProjectEntity> winProj = repository.findAll(
+        Window<ProjectEntity> winProj = repository.findBy(
                 pos,
                 Limit.of(limit));
         return winProj.map(mapper::toResponse);

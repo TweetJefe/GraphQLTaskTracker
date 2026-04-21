@@ -9,7 +9,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.Instant;
+import java.time.OffsetDateTime;
 
 @Entity
 @Table(name = "tasks")
@@ -41,14 +41,16 @@ public class TaskEntity {
 
     @Column(name = "project_id")
     private Long projectId;
+
     private Long assigneeId;
+
     private Long reporterId;
 
     @CreatedDate
-    private Instant createdAt;
+    private OffsetDateTime createdAt;
 
     @LastModifiedDate
-    private Instant updatedAt;
+    private OffsetDateTime updatedAt;
 
-    private Instant deadLine;
+    private OffsetDateTime deadLine;
 }
