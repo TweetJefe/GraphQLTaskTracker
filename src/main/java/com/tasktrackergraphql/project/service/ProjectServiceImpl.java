@@ -9,13 +9,15 @@ import com.tasktrackergraphql.project.dto.UpdateProjectInput;
 import com.tasktrackergraphql.project.mapper.ProjectMapper;
 import com.tasktrackergraphql.project.model.ProjectEntity;
 import com.tasktrackergraphql.project.repository.ProjectRepository;
+import com.tasktrackergraphql.task.model.TaskEntity;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.criteria.Subquery;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Limit;
 import org.springframework.data.domain.ScrollPosition;
 import org.springframework.data.domain.Window;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
@@ -112,10 +114,33 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Window<ProjectResponse> getAllProjects(Long userId, ScrollPosition pos, int limit) {
-        Window<ProjectEntity> winProj = repository.findAllProjectsByReporterId(
-                userId,
-                pos,
-                Limit.of(limit));
+        Specification<ProjectEntity> spec = (root, query, cb) -> {
+            query.distinct(true);
+
+            // 1. Создатель (reporterId)
+            var isReporter = cb.equal(root.get("reporterId"), userId);
+
+            // 2. Участник (в списке Long assignees)
+            var isAssignee = cb.isMember(userId, root.get("assignees"));
+
+            // 3. Исполнитель задач (через подзапрос к TaskEntity)
+            Subquery<Long> taskSubquery = query.subquery(Long.class);
+            var taskRoot = taskSubquery.from(TaskEntity.class);
+            taskSubquery.select(taskRoot.get("id"))
+                    .where(
+                            cb.equal(taskRoot.get("projectId"), root.get("id")),
+                            cb.equal(taskRoot.get("assigneeId"), userId)
+                    );
+            var hasTasks = cb.exists(taskSubquery);
+
+            return cb.or(isReporter, isAssignee, hasTasks);
+        };
+
+        Window<ProjectEntity> winProj = repository.findBy(
+                spec,
+                q -> q.limit(limit).scroll(pos)
+        );
+
         return winProj.map(mapper::toResponse);
     }
 
