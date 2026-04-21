@@ -1,6 +1,7 @@
 package com.tasktrackergraphql.project.model;
 
 import com.tasktrackergraphql.project.enums.ProjectStatus;
+import com.tasktrackergraphql.user.model.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -10,6 +11,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.util.ArrayList;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Set;
+
 @Entity
 @Table(name = "projects")
 @NoArgsConstructor
@@ -47,5 +50,13 @@ public class ProjectEntity {
 
     @Column(name = "pin_code_hash")
     private String pinCodeHash;
+
+//    @ManyToMany
+//    @JoinTable(
+//            name = "project_members",
+//            joinColumns = @JoinColumn(name = "project_id"),
+//            inverseJoinColumns = @JoinColumn(name = "user_id")
+//    )
+//    private Set<UserEntity> members;
 
 }

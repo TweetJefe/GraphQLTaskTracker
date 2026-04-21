@@ -53,7 +53,7 @@ type ProjectResponse {
     startedAt: DateTime
     updatedAt: DateTime
 
-    tasks: [TaskResponse]
+    tasks(first: Int, after: String): TaskConnection
 }
 
 type TaskResponse {

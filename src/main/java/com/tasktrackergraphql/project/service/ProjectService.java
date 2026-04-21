@@ -24,7 +24,7 @@ public interface ProjectService{
 
     ProjectResponse getProjectById (Long projectId);
 
-    Window<ProjectResponse> getAllProjects (ScrollPosition pos, int limit);
+    Window<ProjectResponse> getAllProjects (Long userId, ScrollPosition pos, int limit);
 
     List<ProjectEntity> getAllProjectByReporterId(Long reporterId);
 }

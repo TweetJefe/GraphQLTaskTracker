@@ -6,6 +6,7 @@ import com.tasktrackergraphql.project.dto.ProjectResponse;
 import com.tasktrackergraphql.project.dto.UpdateProjectInput;
 import com.tasktrackergraphql.project.service.ProjectService;
 import com.tasktrackergraphql.task.dto.TaskResponse;
+import com.tasktrackergraphql.user.model.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.ScrollPosition;
 import org.springframework.data.domain.Window;
@@ -14,6 +15,7 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.graphql.data.method.annotation.SchemaMapping;
 import org.springframework.graphql.data.query.ScrollSubrange;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 
 
@@ -56,11 +58,14 @@ public class ProjectGraphQLController {
 
     @QueryMapping
     public Window<ProjectResponse> getAllProjects(
+            Authentication auth,
             ScrollSubrange sub
             ){
+        UserEntity user = (UserEntity) auth.getPrincipal();
+        Long currentUserId = user.getId();
         ScrollPosition pos = sub.position().orElse(ScrollPosition.keyset());
         int limit = sub.count().orElse(10);
-        return service.getAllProjects(pos, limit);
+        return service.getAllProjects(currentUserId, pos, limit);
     }
 
     @MutationMapping
