@@ -30,10 +30,6 @@ public interface TaskService {
 
     Window<TaskResponse> getTasksByAssigneeId(Long assigneeId, ScrollPosition pos, int limit);
 
-    void assignToProject(Long taskId, Long projectId);
-
-    void removeFromProject(Long taskId, Long projectId);
-
     Window<TaskResponse> getAllTasks (Long reporterId, ScrollPosition pos, int limit);
 
     void deleteAllByProjectId(Long projectId);

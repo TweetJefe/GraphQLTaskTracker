@@ -26,12 +26,13 @@ public class UserGraphQLController {
     public AuthResponse authViaTelegram(
             @Argument String initData,
             @Argument Long telegramId,
-            @Argument String username
+            @Argument String username,
+            @Argument String languageCode
     ) {
 //        if (!telegramAuthService.validateInitData(initData)) {
 //            throw new RuntimeException("Invalid data! Access denied.");
 //        }
-        UserEntity user = userService.loginOrRegister(telegramId, username);
+        UserEntity user = userService.loginOrRegister(telegramId, username, languageCode);
         String token = jwtService.generateToken(user.getId());
         return new AuthResponse(token, user.getId());
     }

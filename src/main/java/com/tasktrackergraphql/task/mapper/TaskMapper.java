@@ -39,6 +39,7 @@ public class TaskMapper {
         entity.setProjectId(input.projectId());
         entity.setPriority(input.priority());
         entity.setStatus(TaskStatus.TODO);
+        entity.setDeadLine(input.deadLine());
 
         return entity;
     }

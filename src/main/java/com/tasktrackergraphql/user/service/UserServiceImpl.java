@@ -26,11 +26,12 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public UserEntity loginOrRegister(Long telegramId, String username) {
+    public UserEntity loginOrRegister(Long telegramId, String username, String languageCode) {
         log.info("Starting loginOrRegister for telegramId: {}, username: {}", telegramId, username);
         return repository.findByTelegramId(telegramId)
                 .map(user -> {
                     log.info("User found in database: ID = {}", user.getId());
+                    user.setLanguageCode(languageCode);
                     return user;
                 })
                 .orElseGet(() -> {
@@ -38,7 +39,8 @@ public class UserServiceImpl implements UserService {
                     UserEntity newUser = new UserEntity();
                     newUser.setTelegramId(telegramId);
                     newUser.setUsername(username);
-                    newUser.setName("name"); // Default name
+                    newUser.setName("name");
+                    newUser.setLanguageCode(languageCode);
 
                     UserEntity savedUser = saveUser(newUser);
                     log.info("Successfully created new user with ID: {}", savedUser.getId());
@@ -95,5 +97,12 @@ public class UserServiceImpl implements UserService {
                     return new EntityNotFoundException();
                 });
         return mapper.toResponse(user);
+    }
+
+    @Override
+    public UserResponse getUserByUsername(String username) {
+        UserEntity entity = repository.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException(""));
+        return mapper.toResponse(entity);
     }
 }

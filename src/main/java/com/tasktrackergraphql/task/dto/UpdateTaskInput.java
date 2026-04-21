@@ -3,7 +3,7 @@ package com.tasktrackergraphql.task.dto;
 import com.tasktrackergraphql.task.enums.TaskPriority;
 import com.tasktrackergraphql.task.enums.TaskStatus;
 
-import java.time.Instant;
+import java.time.OffsetDateTime;
 
 public record UpdateTaskInput(
         String name,
@@ -11,6 +11,6 @@ public record UpdateTaskInput(
         Long projectId,
         TaskPriority priority,
         TaskStatus status,
-        Instant deadLine
+        OffsetDateTime deadLine
 ) {
 }

@@ -1,0 +1,181 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1776547259901-1
+      author: Aleksandr
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: project_id
+                  type: BIGINT
+              - column:
+                  name: user_id
+                  type: BIGINT
+            tableName: project_assignees
+  - changeSet:
+      id: 1776547259901-2
+      author: Aleksandr
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_projects
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(255)
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: reporter_id
+                  type: BIGINT
+              - column:
+                  name: status
+                  type: VARCHAR(255)
+              - column:
+                  name: started_at
+                  type: timestamp
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: pin_code_hash
+                  type: VARCHAR(255)
+            tableName: projects
+  - changeSet:
+      id: 1776547259901-3
+      author: Aleksandr
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_tasks
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+              - column:
+                  name: description
+                  type: TEXT
+              - column:
+                  name: status
+                  type: VARCHAR(255)
+              - column:
+                  name: priority
+                  type: VARCHAR(255)
+              - column:
+                  name: project_id
+                  type: BIGINT
+              - column:
+                  name: assignee_id
+                  type: BIGINT
+              - column:
+                  name: reporter_id
+                  type: BIGINT
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: dead_line
+                  type: timestamp
+            tableName: tasks
+  - changeSet:
+      id: 1776547259901-4
+      author: Aleksandr
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_users
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: telegram_id
+                  type: BIGINT
+              - column:
+                  name: username
+                  type: VARCHAR(255)
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+              - column:
+                  name: language_code
+                  type: VARCHAR(255)
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  name: updated_at
+                  type: timestamp
+            tableName: users
+  - changeSet:
+      id: 1776547259901-5
+      author: Aleksandr
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: telegram_id
+            constraintName: uc_users_telegramid
+            tableName: users
+  - changeSet:
+      id: 1776547259901-6
+      author: Aleksandr
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: username
+            constraintName: uc_users_username
+            tableName: users
+  - changeSet:
+      id: 1776547259901-7
+      author: Aleksandr
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: project_id
+            baseTableName: tasks
+            constraintName: FK_TASKS_ON_PROJECT
+            referencedColumnNames: id
+            referencedTableName: projects
+  - changeSet:
+      id: 1776547259901-8
+      author: Aleksandr
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: project_id
+            baseTableName: project_assignees
+            constraintName: fk_project_assignees_on_project_entity
+            referencedColumnNames: id
+            referencedTableName: projects
+

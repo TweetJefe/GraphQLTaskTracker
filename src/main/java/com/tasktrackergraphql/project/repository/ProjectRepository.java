@@ -12,6 +12,4 @@ public interface ProjectRepository extends JpaRepository<ProjectEntity, Long> {
     Window<ProjectEntity> findBy( ScrollPosition pos, Limit limit);
 
     List<ProjectEntity> findAllByReporterId(Long reporterId);
-
-    Window<ProjectEntity> findAll(ScrollPosition pos, Limit of);
 }

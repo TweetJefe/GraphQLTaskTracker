@@ -2,8 +2,7 @@ package com.tasktrackergraphql.project.dto;
 
 import com.tasktrackergraphql.project.enums.ProjectStatus;
 import com.tasktrackergraphql.task.dto.TaskResponse;
-
-import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 public record ProjectResponse(
@@ -13,7 +12,8 @@ public record ProjectResponse(
         List<Long> assignees,
         Long reporterId,
         ProjectStatus status,
-        Instant startedAt,
-        Instant updatedAt
-//        List<TaskResponse> tasks
-){}
+        OffsetDateTime startedAt,
+        OffsetDateTime updatedAt
+) {
+}
+

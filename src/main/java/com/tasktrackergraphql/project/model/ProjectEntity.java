@@ -7,10 +7,9 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.Instant;
 import java.util.ArrayList;
+import java.time.OffsetDateTime;
 import java.util.List;
-
 @Entity
 @Table(name = "projects")
 @NoArgsConstructor
@@ -41,10 +40,10 @@ public class ProjectEntity {
 
     @CreatedDate
     @Column(updatable = false)
-    private Instant startedAt;
+    private OffsetDateTime startedAt;
 
     @LastModifiedDate
-    private Instant updatedAt;
+    private OffsetDateTime updatedAt;
 
     @Column(name = "pin_code_hash")
     private String pinCodeHash;

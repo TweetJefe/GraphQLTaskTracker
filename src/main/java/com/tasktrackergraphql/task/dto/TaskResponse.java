@@ -3,7 +3,7 @@ package com.tasktrackergraphql.task.dto;
 import com.tasktrackergraphql.task.enums.TaskPriority;
 import com.tasktrackergraphql.task.enums.TaskStatus;
 
-import java.time.Instant;
+import java.time.OffsetDateTime;
 
 public record TaskResponse(
         Long id,
@@ -14,7 +14,7 @@ public record TaskResponse(
         Long projectId,
         Long assigneeId,
         Long reporterId,
-        Instant createdAt,
-        Instant updatedAt,
-        Instant deadLine)
+        OffsetDateTime createdAt,
+        OffsetDateTime updatedAt,
+        OffsetDateTime deadLine)
 {}

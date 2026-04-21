@@ -5,10 +5,12 @@ type Query {
 
     getTasksByProjectId(projectId: ID!, first: Int, after: String): TaskConnection
     getTasksByAssigneeId(assigneeId: ID!, first: Int, after: String): TaskConnection
+
+    getUserById(userId: ID!): UserResponse
 }
 
 type Mutation {
-    authViaTelegram(initData: String!, telegramId: ID!, username: String): AuthResponse!
+    authViaTelegram(initData: String!, telegramId: ID!, username: String, languageCode: String): AuthResponse!
     deleteUser(userId: ID!): ID!
 
     createProject(input: CreateProjectInput!): ProjectResponse!
@@ -21,6 +23,7 @@ type Mutation {
     updateTask(id: ID!, input: UpdateTaskInput!): TaskResponse!
     deleteTask(id: ID!): ID!
     assignUser(taskId: ID!, assigneeId: ID!): TaskResponse!
+    assignUserByUsername(taskId: ID!, username: String!): TaskResponse!
     changeStatus(taskId: ID!, status: TaskStatus!): TaskResponse!
 }
 
@@ -30,11 +33,21 @@ type AuthResponse {
     userId: ID!
 }
 
+type UserResponse {
+    id: ID!
+    telegramId: ID!
+    username: String
+    name: String
+    languageCode: String
+    createdAt: DateTime
+    updatedAt: DateTime
+}
+
 type ProjectResponse {
     id: ID!
     name: String!
     description: String
-    assignees: [ID!]
+    assignees: [ID]
     reporterId: ID!
     status: ProjectStatus
     startedAt: DateTime
@@ -50,11 +63,11 @@ type TaskResponse {
     status: TaskStatus!
     priority: TaskPriority!
     projectId: ID!
-    assigneeId: ID!
-    reporterId: ID!
+    assigneeId: ID
+    reporterId: ID
     createdAt: DateTime!
-    updatedAt: DateTime!
-    deadLine: DateTime!
+    updatedAt: DateTime
+    deadLine: DateTime
 
 }
 
@@ -107,25 +120,28 @@ input CreateProjectInput {
     name: String!
     description: String
     reporterId: ID!
-    assignees: [ID!]
+    assignees: [ID]
 }
 
 input UpdateProjectInput {
     name: String!
     description: String
+    status: ProjectStatus
 }
 
 input CreateTaskInput {
     projectId: ID!
     name: String!
     description: String
+    reporterId: ID
     priority: TaskPriority
+    deadLine: DateTime
 }
 
 input UpdateTaskInput {
     name: String!
     description: String
-    projectId: ID!
+    projectId: ID
     priority: TaskPriority
     status: TaskStatus
     deadLine: DateTime
