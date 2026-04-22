@@ -66,12 +66,20 @@ public class ProjectGraphQLController {
         }
         
         Long currentUserId;
-        if (auth.getPrincipal() instanceof Long) {
-            currentUserId = (Long) auth.getPrincipal();
-        } else if (auth.getPrincipal() instanceof UserEntity) {
-            currentUserId = ((UserEntity) auth.getPrincipal()).getId();
+        Object principal = auth.getPrincipal();
+        
+        if (principal instanceof Long) {
+            currentUserId = (Long) principal;
+        } else if (principal instanceof String) {
+            try {
+                currentUserId = Long.parseLong((String) principal);
+            } catch (NumberFormatException e) {
+                throw new RuntimeException("Principal является строкой, но не является числовым ID: " + principal);
+            }
+        } else if (principal instanceof UserEntity) {
+            currentUserId = ((UserEntity) principal).getId();
         } else {
-            throw new RuntimeException("Некорректный тип Principal: " + auth.getPrincipal().getClass().getName());
+            throw new RuntimeException("Некорректный тип Principal: " + principal.getClass().getName());
         }
 
 
