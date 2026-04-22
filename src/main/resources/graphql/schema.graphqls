@@ -3,6 +3,9 @@ type Query {
     getProjectById(id: ID!): ProjectResponse
     getAllProjects(first: Int, after: String): ProjectConnection
 
+    getTaskById(id: ID!): TaskResponse
+    getAllTasks(reporterId: ID, first: Int, after: String): TaskConnection
+
     getTasksByProjectId(projectId: ID!, first: Int, after: String): TaskConnection
     getTasksByAssigneeId(assigneeId: ID!, first: Int, after: String): TaskConnection
 

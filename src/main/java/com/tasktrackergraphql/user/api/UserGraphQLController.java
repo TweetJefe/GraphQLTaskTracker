@@ -29,9 +29,6 @@ public class UserGraphQLController {
             @Argument String username,
             @Argument String languageCode
     ) {
-//        if (!telegramAuthService.validateInitData(initData)) {
-//            throw new RuntimeException("Invalid data! Access denied.");
-//        }
         UserEntity user = userService.loginOrRegister(telegramId, username, languageCode);
         String token = jwtService.generateToken(user.getId());
         return new AuthResponse(token, user.getId());

@@ -61,11 +61,18 @@ public class ProjectGraphQLController {
             Authentication auth,
             ScrollSubrange sub
     ){
-        if (auth == null || !(auth.getPrincipal() instanceof UserEntity)) {
-        throw new RuntimeException("Не авторизован! Ожидался UserEntity...");
-    }
-        UserEntity user = (UserEntity) auth.getPrincipal();
-        Long currentUserId = user.getId();
+        if (auth == null || auth.getPrincipal() == null) {
+            throw new RuntimeException("Не авторизован!");
+        }
+        
+        Long currentUserId;
+        if (auth.getPrincipal() instanceof Long) {
+            currentUserId = (Long) auth.getPrincipal();
+        } else if (auth.getPrincipal() instanceof UserEntity) {
+            currentUserId = ((UserEntity) auth.getPrincipal()).getId();
+        } else {
+            throw new RuntimeException("Некорректный тип Principal: " + auth.getPrincipal().getClass().getName());
+        }
 
 
         ScrollPosition pos = sub.position().orElse(ScrollPosition.keyset());
