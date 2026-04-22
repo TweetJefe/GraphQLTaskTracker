@@ -61,8 +61,8 @@ public class ProjectGraphQLController {
             Authentication auth,
             ScrollSubrange sub
     ){
-        if (auth == null || auth.getPrincipal() == null) {
-            throw new RuntimeException("Не авторизован!");
+        if (auth == null || auth.getPrincipal() == null || "anonymousUser".equals(auth.getPrincipal())) {
+            throw new RuntimeException("Не авторизован! Пожалуйста, войдите в систему.");
         }
         
         Long currentUserId;
@@ -74,7 +74,7 @@ public class ProjectGraphQLController {
             try {
                 currentUserId = Long.parseLong((String) principal);
             } catch (NumberFormatException e) {
-                throw new RuntimeException("Principal является строкой, но не является числовым ID: " + principal);
+                throw new RuntimeException("Ошибка сессии: некорректный ID пользователя.");
             }
         } else if (principal instanceof UserEntity) {
             currentUserId = ((UserEntity) principal).getId();
