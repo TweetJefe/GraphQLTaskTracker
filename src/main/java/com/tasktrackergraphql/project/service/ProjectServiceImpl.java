@@ -16,9 +16,11 @@ import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.ScrollPosition;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Window;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -112,18 +114,13 @@ public class ProjectServiceImpl implements ProjectService {
         return mapper.toResponse(project);
     }
 
+    @Transactional
     @Override
     public Window<ProjectResponse> getAllProjects(Long userId, ScrollPosition pos, int limit) {
         Specification<ProjectEntity> spec = (root, query, cb) -> {
             query.distinct(true);
-
-            // 1. Создатель (reporterId)
             var isReporter = cb.equal(root.get("reporterId"), userId);
-
-            // 2. Участник (в списке Long assignees)
             var isAssignee = cb.isMember(userId, root.get("assignees"));
-
-            // 3. Исполнитель задач (через подзапрос к TaskEntity)
             Subquery<Long> taskSubquery = query.subquery(Long.class);
             var taskRoot = taskSubquery.from(TaskEntity.class);
             taskSubquery.select(taskRoot.get("id"))
@@ -138,7 +135,9 @@ public class ProjectServiceImpl implements ProjectService {
 
         Window<ProjectEntity> winProj = repository.findBy(
                 spec,
-                q -> q.limit(limit).scroll(pos)
+                q -> q.sortBy(Sort.by(Sort.Direction.DESC, "id"))
+                        .limit(limit)
+                        .scroll(pos)
         );
 
         return winProj.map(mapper::toResponse);
