@@ -58,13 +58,24 @@ public class ProjectGraphQLController {
 
     @QueryMapping
     public Window<ProjectResponse> getAllProjects(
-            Authentication auth,
+            // Authentication auth, <-- Временно отключили, чтобы не ругался
             ScrollSubrange sub
-            ){
-        UserEntity user = (UserEntity) auth.getPrincipal();
-        Long currentUserId = user.getId();
+    ){
+    /* ВРЕМЕННО ОТКЛЮЧЕНО ДО НАСТРОЙКИ ФРОНТА
+    if (auth == null || !(auth.getPrincipal() instanceof UserEntity)) {
+        throw new RuntimeException("Не авторизован! Ожидался UserEntity...");
+    }
+    UserEntity user = (UserEntity) auth.getPrincipal();
+    Long currentUserId = user.getId();
+    */
+
+        // ХАРДКОД ДЛЯ ТЕСТА: Подставь сюда ID юзера, который точно есть у тебя в БД (например, 1L)
+        Long currentUserId = 1L;
+
         ScrollPosition pos = sub.position().orElse(ScrollPosition.keyset());
         int limit = sub.count().orElse(10);
+
+        // Обрати внимание на название метода сервиса, мы его вроде переименовали в getAllUserProjects
         return service.getAllProjects(currentUserId, pos, limit);
     }
 

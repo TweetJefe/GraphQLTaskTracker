@@ -51,12 +51,4 @@ public class ProjectEntity {
     @Column(name = "pin_code_hash")
     private String pinCodeHash;
 
-//    @ManyToMany
-//    @JoinTable(
-//            name = "project_members",
-//            joinColumns = @JoinColumn(name = "project_id"),
-//            inverseJoinColumns = @JoinColumn(name = "user_id")
-//    )
-//    private Set<UserEntity> members;
-
 }

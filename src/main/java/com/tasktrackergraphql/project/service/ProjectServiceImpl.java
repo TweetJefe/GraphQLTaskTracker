@@ -15,6 +15,7 @@ import jakarta.persistence.criteria.Subquery;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Limit;
 import org.springframework.data.domain.ScrollPosition;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Window;
@@ -114,33 +115,25 @@ public class ProjectServiceImpl implements ProjectService {
         return mapper.toResponse(project);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public Window<ProjectResponse> getAllProjects(Long userId, ScrollPosition pos, int limit) {
         Specification<ProjectEntity> spec = (root, query, cb) -> {
             query.distinct(true);
-            var isReporter = cb.equal(root.get("reporterId"), userId);
-            var isAssignee = cb.isMember(userId, root.get("assignees"));
-            Subquery<Long> taskSubquery = query.subquery(Long.class);
-            var taskRoot = taskSubquery.from(TaskEntity.class);
-            taskSubquery.select(taskRoot.get("id"))
-                    .where(
-                            cb.equal(taskRoot.get("projectId"), root.get("id")),
-                            cb.equal(taskRoot.get("assigneeId"), userId)
-                    );
-            var hasTasks = cb.exists(taskSubquery);
-
-            return cb.or(isReporter, isAssignee, hasTasks);
+            return cb.or(
+                    cb.equal(root.get("reporterId"), userId),
+                    cb.isMember(userId, root.get("assignees"))
+            );
         };
 
-        Window<ProjectEntity> winProj = repository.findBy(
+        Window<ProjectEntity> window = repository.findBy(
                 spec,
-                q -> q.sortBy(Sort.by(Sort.Direction.DESC, "id"))
-                        .limit(limit)
+                q -> q.limit(limit)
+                        .sortBy(Sort.by(Sort.Direction.DESC, "id"))
                         .scroll(pos)
         );
 
-        return winProj.map(mapper::toResponse);
+        return window.map(mapper::toResponse);
     }
 
     @Override
