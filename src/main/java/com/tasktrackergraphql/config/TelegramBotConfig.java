@@ -1,6 +1,6 @@
 package com.tasktrackergraphql.config;
 
-import com.tasktrackergraphql.common.service.TelegramService;
+import com.tasktrackergraphql.telegram.TelegramService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;

@@ -1,6 +1,6 @@
 package com.tasktrackergraphql;
 
-import com.tasktrackergraphql.common.service.TelegramService;
+import com.tasktrackergraphql.telegram.TelegramService;
 import com.tasktrackergraphql.project.model.ProjectEntity;
 import com.tasktrackergraphql.project.service.ProjectService;
 import com.tasktrackergraphql.task.dto.TaskResponse;
